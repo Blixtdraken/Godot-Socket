@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqkg3uvl2hu11"]
+
+[ext_resource type="Script" uid="uid://05ryemnitopa" path="res://socket-server/socket_client.gd" id="1_hgwxi"]
+
+[node name="SocketClient" type="Node"]
+script = ExtResource("1_hgwxi")
