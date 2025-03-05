@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://conk1qmemuu03"]
 
 [ext_resource type="Script" uid="uid://cmjpjg0ye1nud" path="res://socket_server.gd" id="1_7j4yy"]
-[ext_resource type="Script" uid="uid://c3jivo28dqhwd" path="res://scoket_room_handler.gd" id="2_ggamb"]
+[ext_resource type="Script" uid="uid://c3jivo28dqhwd" path="res://socket_room_service.gd" id="2_ggamb"]
 
 [node name="SocketServer" type="Node"]
 script = ExtResource("1_7j4yy")
 
-[node name="ScoketRoomHandler" type="Node" parent="."]
+[node name="SocketRoomHandler" type="Node" parent="."]
 script = ExtResource("2_ggamb")
