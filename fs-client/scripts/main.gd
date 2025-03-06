@@ -10,7 +10,10 @@ func _ready() -> void:
 	room_service_packet.request_type = FSRoomServicePacket.RequestType.REQ_JOIN
 	room_service_packet.room_target = "1234"
 	
-	var dict:Dictionary = FSSerializer.packet_to_dictionary(room_service_packet)
+	var dict:Dictionary = FSSerializer.object_to_dictionary(room_service_packet)
+	
+	var object:FSRoomServicePacket = FSSerializer.dictionary_to_object(dict)
+	
 	
 	FSClient.server_connect_scene = preload("res://scenes/main.tscn")
 	FSClient.server_connected.connect(_on_server_connect)

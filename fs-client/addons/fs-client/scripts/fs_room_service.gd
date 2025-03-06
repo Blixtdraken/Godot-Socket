@@ -33,7 +33,7 @@ func request_to_join_room(room_id:String):
 	room_service_packet.request_type = FSRoomServicePacket.RequestType.REQ_JOIN
 	room_service_packet.room_target = room_id
 	
-	client_peer.put_packet(var_to_bytes_with_objects(room_service_packet))
+	client_peer.put_packet(FSSerializer.object_to_bytes(room_service_packet))
 	pass
 
 func request_to_host_room(room_id:String, room_config:FSRoomConfig):
