@@ -1,18 +1,19 @@
 extends Node
 
+
 var client_peer:PacketPeer
-var uuid:int = -1
+var uuid:int = -2
+#var is_connected:bool = false
+
+var server_connect_scene:PackedScene = null
+
+@onready var room_service:FSRoomService = $RoomService
 
 signal server_connected
 signal server_connection_failed
 signal server_disconnected
 
 func _ready() -> void:
-	if OS.has_feature("web"):
-		connect_to_web_server("127.0.0.1", 5555)
-	else:
-		connect_to_server("127.0.0.1", 5555)
-		
 	server_disconnected.connect(_on_server_disconnect)
 	pass
 
@@ -31,6 +32,8 @@ func _on_server_disconnect():
 	client_peer = null
 	uuid = -1
 	print("Discconected from server!")
+	if server_connect_scene:
+		get_tree().call_deferred("change_scene_to_packed", server_connect_scene)
 	pass
 
 func _is_still_connected(should_poll_web:bool = true)->bool:
@@ -45,7 +48,6 @@ func _is_still_connected(should_poll_web:bool = true)->bool:
 	else:
 		((client_peer as PacketPeerStream).stream_peer as StreamPeerTCP).poll()
 		var status: StreamPeerTCP.Status = ((client_peer as PacketPeerStream).stream_peer as StreamPeerTCP).get_status()
-		print(status)
 		if status in [StreamPeerTCP.STATUS_ERROR, StreamPeerTCP.STATUS_NONE]:
 			return false
 	return true
@@ -71,7 +73,6 @@ func connect_to_server(ip_addr:String, port:int):
 		await get_tree().process_frame
 	if peer_stream.get_status() == peer_stream.STATUS_CONNECTED:
 		print("Server connected!")
-		server_connected.emit()
 		_uuid_handshake()
 	elif peer_stream.get_status() == peer_stream.STATUS_ERROR:
 		print("Server error!")
@@ -99,7 +100,6 @@ func connect_to_web_server(ip_addr:String, port:int, tls_client_options:TLSOptio
 		await get_tree().process_frame
 	if packet_web_peer.get_ready_state() == packet_web_peer.STATE_OPEN:
 		print("Server connected!")
-		server_connected.emit()
 		_uuid_handshake()
 	elif packet_web_peer.get_ready_state() == packet_web_peer.STATE_CLOSED or packet_web_peer.STATE_CLOSING:
 		print("Server error!")
@@ -111,9 +111,12 @@ func connect_to_web_server(ip_addr:String, port:int, tls_client_options:TLSOptio
 ## INTERNAL: called after server connection formed, waits to be given a uuid
 func _uuid_handshake():
 	print("Waiting to be assigned uuid...")
+	
 	while client_peer.get_available_packet_count() == 0:
 		await get_tree().process_frame
+		if !_is_still_connected(): server_connection_failed.emit()
 	var new_uuid:int = bytes_to_var(client_peer.get_packet())
 	uuid = new_uuid
 	print("Assigned uuid of " + str(new_uuid))
+	server_connected.emit()
 	pass

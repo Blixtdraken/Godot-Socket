@@ -10,18 +10,16 @@ config_version=5
 
 [application]
 
-config/name="Socket-Server"
-run/main_scene="res://socket_server.tscn"
+config/name="Socket-Client"
+run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
-[display]
+[autoload]
 
-display_server/driver.windows="headless"
-display_server/driver.linuxbsd="headless"
-display_server/driver.android="headless"
-display_server/driver.ios="headless"
-display_server/driver.macos="headless"
+FSClient="*res://addons/fs-client/fs_client_global.tscn"
+WierdBackgroundSpinny="*res://scenes/wierd_background_spinny.tscn"
+Debug="*res://scenes/debug_global.tscn"
 
 [rendering]
 

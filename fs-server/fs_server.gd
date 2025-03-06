@@ -2,7 +2,6 @@ extends Node
 class_name FSServer
 
 var tcp_server:TCPServer
-var web_server:WebSocketPeer
 
 
 var uuid_to_user:Dictionary[int, FSUser]
@@ -12,7 +11,6 @@ var room_service:FSRoomService = $SocketRoomHandler
 
 
 func _ready() -> void:
-	print("Starting server(s)...")
 	start_server("0.0.0.0", 5555)
 	start_accepting_clients()
 	pass # Replace with function body.
@@ -34,14 +32,14 @@ func _on_peer_discconnect(uuid:int):
 
 ## Starts and setups the tcp server
 func start_server(ip_addr:String, port:int):
-	print("Sarting TCP server...")
+	print("Starting server...")
 	var server:TCPServer = TCPServer.new()
 	tcp_server = server
 	var server_error:Error = server.listen(port, ip_addr)
 	
 	
 	if server.is_listening():
-		print("TCP Server is listening on " + ip_addr + ":" + str(port))
+		print("Server is listening on " + ip_addr + ":" + str(port))
 	else:
 		print("Failed Starting TCP server!")
 		print("Error: " + error_string(server_error))
@@ -65,7 +63,7 @@ func start_accepting_clients():
 		else:
 			print("User connected via WebSocket, assigning uuid")
 			uuid_handshake(web_peer)
-			
+
 
 
 ## Called after accepting a client to give it a uuid and then hand it over to room service
@@ -76,7 +74,6 @@ func uuid_handshake(peer:PacketPeer)->void:
 	var new_user:FSUser = FSUser.new(peer, new_uui, self)
 	new_user.peer_disconnected.connect(_on_peer_discconnect)
 	uuid_to_user[new_uui] = new_user
-	await get_tree().create_timer(2).timeout
 	peer.put_packet(var_to_bytes(new_uui))
 	print("Assigned and sent uuid of " + str(new_uui))
 	room_service.hand_over_user(new_user)

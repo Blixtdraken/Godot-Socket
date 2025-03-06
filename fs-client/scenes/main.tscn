@@ -1,0 +1,78 @@
+[gd_scene load_steps=6 format=3 uid="uid://dyh0d5j1dx8fx"]
+
+[ext_resource type="Script" uid="uid://desluaxotggmi" path="res://scripts/main.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://dsngecpcsp0ev" path="res://icon.svg" id="2_sugp2"]
+
+[sub_resource type="Theme" id="Theme_ig7tw"]
+default_font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_0xm2m"]
+font_size = 35
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h2yge"]
+font_size = 60
+font_color = Color(0.403922, 1, 1, 1)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0wfyh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -283.0
+offset_top = -74.0
+offset_right = 283.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ig7tw")
+text = "Connect to server"
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Button"]
+modulate = Color(0.259294, 0.259294, 0.259294, 1)
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_sugp2")
+
+[node name="ErrorLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 293.0
+offset_right = -293.0
+offset_bottom = -413.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_0xm2m")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="ConnectingLabel" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 293.0
+offset_top = 250.0
+offset_right = -293.0
+offset_bottom = -250.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Connecting..."
+label_settings = SubResource("LabelSettings_h2yge")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_connect_pressed"]

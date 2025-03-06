@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=3 uid="uid://dn3faubd67sp5"]
+
+[ext_resource type="Script" uid="uid://ksqj75516guf" path="res://scripts/room_ui.gd" id="1_c1pem"]
+
+[sub_resource type="Theme" id="Theme_gx5ck"]
+default_font_size = 25
+
+[sub_resource type="Theme" id="Theme_ylp4j"]
+default_font_size = 38
+
+[sub_resource type="Theme" id="Theme_14tkw"]
+default_font_size = 38
+
+[node name="RoomUI" type="Node2D"]
+script = ExtResource("1_c1pem")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+self_modulate = Color(0, 1, 0.433333, 0.341176)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 263.0
+offset_top = 160.0
+offset_right = -263.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -273.0
+offset_top = -49.0
+offset_right = 273.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_gx5ck")
+placeholder_text = "Room Code..."
+alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -273.0
+offset_top = 35.0
+offset_right = -64.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ylp4j")
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 35.0
+offset_right = 273.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_14tkw")
+text = "Join"
+
+[connection signal="text_changed" from="CanvasLayer/Panel/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="pressed" from="CanvasLayer/Panel/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/JoinButton" to="." method="_on_join_button_pressed"]

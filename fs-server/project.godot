@@ -10,14 +10,20 @@ config_version=5
 
 [application]
 
-config/name="Socket-Client"
-run/main_scene="res://main.tscn"
+config/name="Socket-Server"
+run/main_scene="res://socket_server.tscn"
+run/print_header=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
+run/max_fps=100
 config/icon="res://icon.svg"
 
-[autoload]
+[display]
 
-SocketClient="*res://fs-server/fs_client.tscn"
+display_server/driver.windows="headless"
+display_server/driver.linuxbsd="headless"
+display_server/driver.android="headless"
+display_server/driver.ios="headless"
+display_server/driver.macos="headless"
 
 [rendering]
 

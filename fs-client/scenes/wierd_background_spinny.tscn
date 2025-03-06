@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://be5tdwiv0f5me"]
+
+[ext_resource type="Texture2D" uid="uid://dsngecpcsp0ev" path="res://icon.svg" id="1_f14jc"]
+[ext_resource type="Script" uid="uid://cpc4nkqluahjc" path="res://scripts/spin.gd" id="2_svy5s"]
+
+[node name="Sprite2D" type="CanvasLayer"]
+layer = -128
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(522, 612)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_f14jc")
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Sprite2D2"]
+position = Vector2(64, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Sprite2D2/Sprite2D3"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Sprite2D2/Sprite2D3/Sprite2D4"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D6" type="Sprite2D" parent="Sprite2D2/Sprite2D3/Sprite2D4/Sprite2D5"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Sprite2D2/Sprite2D3/Sprite2D4/Sprite2D5/Sprite2D6"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Sprite2D2/Sprite2D3/Sprite2D4/Sprite2D5/Sprite2D6/Sprite2D5"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")
+
+[node name="Sprite2D6" type="Sprite2D" parent="Sprite2D2/Sprite2D3/Sprite2D4/Sprite2D5/Sprite2D6/Sprite2D5/Sprite2D5"]
+position = Vector2(128, 0)
+texture = ExtResource("1_f14jc")
+offset = Vector2(64, 0)
+script = ExtResource("2_svy5s")

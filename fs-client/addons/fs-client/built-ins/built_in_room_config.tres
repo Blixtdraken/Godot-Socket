@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FSRoomConfig" load_steps=2 format=3 uid="uid://bi0hy41j1hxft"]
+
+[ext_resource type="Script" uid="uid://bunuu185pxkrq" path="res://addons/fs-client/shared/fs_room_config.gd" id="1_b2e32"]
+
+[resource]
+script = ExtResource("1_b2e32")
+max_users = 16
+has_host = true
+only_host_personal_packets = true
+global_variables = Dictionary[String, Variant]({})
+hosts_global_variables = Dictionary[String, Variant]({})
+host_only_variables = Dictionary[String, Variant]({})
+metadata/_custom_type_script = "uid://bunuu185pxkrq"
