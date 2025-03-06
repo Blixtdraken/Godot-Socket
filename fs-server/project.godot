@@ -15,7 +15,6 @@ config/description="Server for FSMultiplayer project"
 run/main_scene="res://socket_server.tscn"
 run/print_header=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
-run/max_fps=100
 config/icon="res://icon.svg"
 
 [display]

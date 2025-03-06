@@ -13,6 +13,8 @@ signal server_connected
 signal server_connection_failed
 signal server_disconnected
 
+signal _packet_received(packet:Object)
+
 func _ready() -> void:
 	server_disconnected.connect(_on_server_disconnect)
 	pass
@@ -25,7 +27,12 @@ func _process(delta: float) -> void:
 			client_peer.poll()
 		if !_is_still_connected(false):
 			server_disconnected.emit()
-			
+		elif _packet_received.has_connections():
+			if client_peer.get_available_packet_count() != 0:
+				var packet:Object = FSSerializer.bytes_to_object(client_peer.get_packet())
+				_packet_received.emit(packet)
+		elif client_peer.get_available_packet_count() != 0:
+			print("Queueing packages")
 	pass
 
 func _on_server_disconnect():
