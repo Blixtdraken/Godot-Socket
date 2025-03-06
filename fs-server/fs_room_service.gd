@@ -22,11 +22,15 @@ func _ready() -> void:
 		for peer in lobby_peer_list:
 			if peer.get_available_packet_count() != 0:
 				var packet = FSSerializer.bytes_to_object(peer.get_packet())
+				print(packet)
 				if packet is FSRoomServicePacket:
 					handle_incoming_room_req(packet)
 			await get_tree().process_frame
 	pass
 
 func handle_incoming_room_req(packet:FSRoomServicePacket):
+	print(FSSerializer.object_to_dictionary(packet))
+	
+	
 	# TODO: Handle this and add symlinks, and make room service package contain something
 	pass

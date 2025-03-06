@@ -21,12 +21,8 @@ static func dictionary_to_object(dict:Dictionary) -> Object:
 		for i_class in ProjectSettings.get_global_class_list():
 			if i_class["class"] == class_string:
 				class_script_cache[class_string] = load(i_class["path"])
-				print(i_class["path"])
 				class_script = class_script_cache[class_string]
 				break
-	
-	print(class_script)
-	
 	var built_object:Object = class_script.new()
 	for key in dict["variables"].keys():
 		built_object.set(key, dict["variables"][key])
