@@ -1,0 +1,1 @@
+/usr/bin/godot --path /home/fei/godot-projects/fs-multiplayer/fs-server --remote-debug tcp://127.0.0.1:6007 --position 384,216 res://server.tscn

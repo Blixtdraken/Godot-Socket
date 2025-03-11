@@ -12,10 +12,15 @@ config_version=5
 
 config/name="FS-Server"
 config/description="Server for FSMultiplayer project"
-run/main_scene="res://socket_server.tscn"
+run/main_scene="res://server.tscn"
 run/print_header=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
+run/low_processor_mode_sleep_usec=1
 config/icon="res://icon.svg"
+
+[audio]
+
+driver/driver="Dummy"
 
 [display]
 
@@ -24,8 +29,24 @@ display_server/driver.linuxbsd="headless"
 display_server/driver.android="headless"
 display_server/driver.ios="headless"
 display_server/driver.macos="headless"
+window/vsync/vsync_mode=0
+
+[editor]
+
+movie_writer/disable_vsync=true
+
+[physics]
+
+2d/physics_engine="Dummy"
+3d/physics_engine="Dummy"
 
 [rendering]
 
+rendering_device/driver="Dummy"
+rendering_device/fallback_to_vulkan=false
+rendering_device/fallback_to_d3d12=false
+rendering_device/fallback_to_opengl3=false
+gl_compatibility/driver="Dummy"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+driver/depth_prepass/enable=false

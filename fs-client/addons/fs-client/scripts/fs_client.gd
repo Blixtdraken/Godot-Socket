@@ -1,4 +1,4 @@
-extends Node
+extends Object
 
 
 var client_peer:PacketPeer
@@ -7,7 +7,7 @@ var uuid:int = -2
 
 var server_connect_scene:PackedScene = null
 
-@onready var room_service:FSRoomService = $RoomService
+
 
 signal server_connected
 signal server_connection_failed
@@ -22,17 +22,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if client_peer:
-		if client_peer is WebSocketPeer:
-			client_peer.poll()
-		if !_is_still_connected(false):
-			server_disconnected.emit()
-		elif _packet_received.has_connections():
-			if client_peer.get_available_packet_count() != 0:
-				var packet:Object = FSSerializer.bytes_to_object(client_peer.get_packet())
-				_packet_received.emit(packet)
-		elif client_peer.get_available_packet_count() != 0:
-			print("Queueing packages")
 	pass
 
 func _on_server_disconnect():
@@ -40,7 +29,7 @@ func _on_server_disconnect():
 	uuid = -1
 	print("Discconected from server!")
 	if server_connect_scene:
-		get_tree().call_deferred("change_scene_to_packed", server_connect_scene)
+		Engine.get_main_loop().call_deferred("change_scene_to_packed", server_connect_scene)
 	pass
 
 func _is_still_connected(should_poll_web:bool = true)->bool:
@@ -77,7 +66,7 @@ func connect_to_server(ip_addr:String, port:int):
 	print("Connecting...")
 	while peer_stream.get_status() == peer_stream.STATUS_CONNECTING:
 		peer_stream.poll()
-		await get_tree().process_frame
+		await Engine.get_main_loop().process_frame
 	if peer_stream.get_status() == peer_stream.STATUS_CONNECTED:
 		print("Server connected!")
 		_uuid_handshake()
@@ -104,7 +93,7 @@ func connect_to_web_server(ip_addr:String, port:int, tls_client_options:TLSOptio
 	
 	print("Connecting...")
 	while packet_web_peer.get_ready_state() == packet_web_peer.STATE_CONNECTING:
-		await get_tree().process_frame
+		await Engine.get_main_loop().process_frame
 	if packet_web_peer.get_ready_state() == packet_web_peer.STATE_OPEN:
 		print("Server connected!")
 		_uuid_handshake()
@@ -120,7 +109,7 @@ func _uuid_handshake():
 	print("Waiting to be assigned uuid...")
 	
 	while client_peer.get_available_packet_count() == 0:
-		await get_tree().process_frame
+		await Engine.get_main_loop().process_frame
 		if !_is_still_connected(): server_connection_failed.emit()
 	var new_uuid:int = bytes_to_var(client_peer.get_packet())
 	uuid = new_uuid

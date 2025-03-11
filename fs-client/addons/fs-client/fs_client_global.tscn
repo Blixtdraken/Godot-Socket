@@ -1,10 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqkg3uvl2hu11"]
+[gd_scene load_steps=2 format=3 uid="uid://cqkg3uvl2hu11"]
 
 [ext_resource type="Script" uid="uid://05ryemnitopa" path="res://addons/fs-client/scripts/fs_client.gd" id="1_clwkw"]
-[ext_resource type="Script" uid="uid://fqojr5bg8wiq" path="res://addons/fs-client/scripts/fs_room_service.gd" id="2_e220x"]
 
 [node name="SocketClient" type="Node"]
 script = ExtResource("1_clwkw")
-
-[node name="RoomService" type="Node" parent="."]
-script = ExtResource("2_e220x")

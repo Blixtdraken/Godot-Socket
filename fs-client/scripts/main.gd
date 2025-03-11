@@ -19,10 +19,11 @@ func _on_connect_pressed() -> void:
 	connect_button.hide()
 	connecting_label.show()
 	error_label.text = ""
+	var ip:String = "127.0.0.1"
 	if OS.has_feature("web"):
-		FSClient.connect_to_web_server("127.0.0.1", 5555)
+		FSClient.connect_to_web_server(ip, 55555)
 	else:
-		FSClient.connect_to_server("127.0.0.1", 5555)
+		FSClient.connect_to_server(ip, 55555)
 	pass # Replace with function body.
 
 
