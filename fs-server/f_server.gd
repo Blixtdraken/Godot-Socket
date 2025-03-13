@@ -1,7 +1,7 @@
 extends Object
 class_name FServer
 
-signal disconnect_queue(user:FSUser)
+signal send_function()
 signal tps(fps_limiter:FTimer)
 
 static var thread:Thread = Thread.new()
@@ -61,22 +61,16 @@ func start_handling_connections():
 	FLog.server("Started handling connections")
 	while true:
 		if tcp_sever.is_connection_available():
-			
-			var peer:PacketPeerStream = PacketPeerStream.new()
 			var tcp_peer:StreamPeerTCP = tcp_sever.take_connection()
-			peer.stream_peer = tcp_peer
-			var web_peer:WebSocketPeer = WebSocketPeer.new()
-			var web_error:Error = web_peer.accept_stream(peer.stream_peer) # On normal tcp connection this does nothing idk why
-			web_peer.poll() # Needed to update connection state of websocket
-			FLog.server(str(check_if_websocket(tcp_peer)))
 			## TODO: Find a way to differenciate between websocket connections and normal tcp
-			if web_peer.get_ready_state() == WebSocketPeer.STATE_CONNECTING:
-				FLog.server(tcp_peer.get_connected_host() +" connected via TCP")
-				initiate_packet_peer(peer)
-			else:
-				FLog.server(tcp_peer.get_connected_host() + " connected via WebSocket")
-				initiate_packet_peer(web_peer)
-				
+			
+			var packet_peer_stream:PacketPeerStream = PacketPeerStream.new()
+			packet_peer_stream.stream_peer = tcp_peer
+			
+			FLog.user(tcp_peer.get_connected_host() + ":" + str(tcp_peer.get_connected_port()) + " connected via TCP")
+			initiate_packet_peer(packet_peer_stream)
+
+
 		signal_tick()
 		tps_limiter.tick()
 
@@ -92,13 +86,14 @@ func check_if_websocket(peer: StreamPeerTCP) -> bool:
 	return false
 
 func signal_tick():
-	tps.emit(tps_limiter)
-	disconnect_queue.emit()
+	send_function.emit()
 	pass
 
 func initiate_packet_peer(peer:PacketPeer):
 	var new_user:FSUser = setup_new_user(peer)
-	FSLobby.instance.lobby_queue.connect(new_user._lobby_queue_signal, CONNECT_ONE_SHOT)
+	FLog.user(str(new_user.uuid) + "  was assigned an UUID")
+	new_user.hand_over_to_lobby()
+	FLog.user(str(new_user.uuid) + "  was handed to lobby")
 	pass
 
 func setup_new_user(peer:PacketPeer)->FSUser:

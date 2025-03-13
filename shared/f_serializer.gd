@@ -1,4 +1,4 @@
-class_name FSSerializer
+class_name FSerializer
 
 
 

@@ -6,7 +6,7 @@ var values_list:Dictionary[String, Variant] = {}
 
 func _process(delta: float) -> void:
 	values_list["fps"] = roundi(1.0/delta)
-	
+
 	
 	
 	debug_label.text = ""

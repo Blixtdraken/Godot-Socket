@@ -3,6 +3,8 @@ class_name FSUser
 
 var is_websocket:bool = false
 
+var nickname:String = ""
+
 var uuid:int
 var peer:PacketPeer
 
@@ -33,13 +35,34 @@ func is_still_connected(should_poll:bool = true)->bool:
 	return true
 
 
-
+func hand_over_to_lobby():
+	FSLobby.instance.send_function.connect(self._lobby_queue_signal, CONNECT_ONE_SHOT)
+	pass
 func _lobby_queue_signal():
 	FSLobby.instance.lobby_user_list[self.uuid] = self
-	pass
 	
-func _room_queue_signal():
+	peer.put_packet(var_to_bytes(
+		{
+			"packet_type":"lobby_join"
+		}
+	))
+
 	pass
-	
+
+func hand_over_to_room(room:FSRoom):
+	room.send_function.connect(_room_queue_signal, CONNECT_ONE_SHOT)
+	pass
+
+func _room_queue_signal(room:FSRoom):
+	room.user_list[self.uuid] = self
+	pass
+
+func send_disconnect():
+	FServer.instance.send_function.connect(self._disconnect_signal, CONNECT_ONE_SHOT)
+	pass
+
 func _disconnect_signal():
+	FServer.instance.uuid_to_user.erase(self.uuid)
+	FLog.user(str(uuid) + "  disconnected from server")
+
 	pass

@@ -51,7 +51,6 @@ func delay_from_time():
 	pass
 
 func delay_usec(usec:int):
-	
 	OS.delay_usec(clamp(usec - sampled_constant_delay, 0, INF))
 	pass
 

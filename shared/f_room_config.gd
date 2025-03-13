@@ -1,5 +1,5 @@
 extends Resource
-class_name FSRoomConfig
+class_name FRoomConfig
 
 @export_subgroup("Room Settings")
 @export var max_users:int = 16

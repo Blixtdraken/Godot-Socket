@@ -1,0 +1,8 @@
+extends Object
+class_name FClientSignals
+
+signal server_connected
+signal server_connection_failed
+signal server_disconnected
+
+signal _packet_received(packet:Dictionary)
