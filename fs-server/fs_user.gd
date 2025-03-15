@@ -54,7 +54,7 @@ func hand_over_to_room(room:FSRoom):
 	pass
 
 func _room_queue_signal(room:FSRoom):
-	room.user_list[self.uuid] = self
+	room.unconfirmed_user_list[self.uuid] = self
 	pass
 
 func send_disconnect():

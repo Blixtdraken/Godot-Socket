@@ -3,15 +3,21 @@ extends Node2D
 
 
 func _ready() -> void:
+	Debug.values_list.erase("room_id")
+	Debug.values_list.erase("selected_uuid")
 	FCLobby.signals.room_req_response.connect(_on_room_req)
 	pass
 
 func _on_room_req(room_id:String, approved:bool, disapproval_msg:String):
 	if approved:
 		Debug.values_list["room_id"] = room_id
-		get_tree().change_scene_to_packed(preload("res://room.tscn"))
+		get_tree().change_scene_to_packed(preload("res://scenes/room.tscn"))
 	else:
 		print(disapproval_msg)
+		if !disapproval_msg.is_empty():
+			%ErrorLabel.text = disapproval_msg
+		else:
+			%ErrorLabel.text = "Something went very rwrong now??? probably serverr side"
 	pass
 
 var written_code:String = ""

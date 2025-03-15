@@ -138,10 +138,11 @@ func client_loop():
 	while true:
 		await tree.process_frame
 		if client_peer.get_available_packet_count() >= 1:
-			signals._packet_received.emit(bytes_to_var(client_peer.get_packet()) as Dictionary)
-			pass
+			var packet:Dictionary = bytes_to_var(client_peer.get_packet())
+			signals._packet_received.emit(packet)
+			#print(packet)
+			Debug.values_list["last_packet"] = str(packet)
 		if !is_still_connected():
 			signals.server_disconnected.emit()
 			break
-			pass
 	pass

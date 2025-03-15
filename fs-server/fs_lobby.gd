@@ -8,6 +8,8 @@ signal tps(fps_limiter:FTimer)
 static var thread:Thread = Thread.new()
 static var instance:FSLobby
 
+
+
 var lobby_user_list:Dictionary[int,FSUser] = {}
 var id_to_room:Dictionary[String, FSRoom] = {}
 
@@ -61,8 +63,8 @@ func handle_incoming_packets():
 					pass
 	pass
 
-func handle_host_packet(join_packet:Dictionary, user:FSUser):
-	var room_id:String = join_packet["room_id"]
+func handle_host_packet(host_packet:Dictionary, user:FSUser):
+	var room_id:String = host_packet["room_id"]
 	var packet:Dictionary = {
 			"packet_type":"room_req_result",
 			"room_id":room_id,
@@ -79,9 +81,26 @@ func handle_host_packet(join_packet:Dictionary, user:FSUser):
 		pass
 	user.peer.put_packet(var_to_bytes(packet))
 	pass
-func handle_join_packet(host_packet:Dictionary, user:FSUser):
-	var room_id:String = host_packet["room_id"]
+func handle_join_packet(join_packet:Dictionary, user:FSUser):
+	var room_id:String = join_packet["room_id"]
+	var packet:Dictionary = {
+			"packet_type":"room_req_result",
+			"room_id":room_id,
+			"approval":false,
+			"error_msg":""
+		}
+	if !id_to_room.has(room_id):
+		packet["error_msg"] = "Can't join, room doesn't exist..."
+	else:
+		
+		var room_to_join:FSRoom = id_to_room[room_id]
+		if room_to_join.is_active:
+			packet["approval"] = true
+			lobby_user_list.erase(user.uuid)
+			user.hand_over_to_room(room_to_join)
+	user.peer.put_packet(var_to_bytes(packet))
 	pass
+
 
 func signal_tick():
 	send_function.emit()

@@ -1,6 +1,8 @@
 extends Object
 class_name FServer
 
+static var thread_name:Dictionary[int, String] = {}
+
 signal send_function()
 signal tps(fps_limiter:FTimer)
 

@@ -25,3 +25,4 @@ Debug="*res://scenes/debug_global.tscn"
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.112365, 0.11717, 0.172499, 1)

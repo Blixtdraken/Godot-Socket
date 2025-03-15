@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://4pb2rxqs0ooc"]
+
+[ext_resource type="Script" uid="uid://n1k3gxbwpeqy" path="res://room.gd" id="1_36trf"]
+[ext_resource type="Texture2D" uid="uid://dsngecpcsp0ev" path="res://icon.svg" id="2_ffxv4"]
+[ext_resource type="Script" uid="uid://d2xatamymvyjc" path="res://scenes/uuid_list.gd" id="3_85yof"]
+
+[node name="Room" type="Node2D" node_paths=PackedStringArray("user_list")]
+script = ExtResource("1_36trf")
+user_list = NodePath("UserList")
+
+[node name="Leave" type="Button" parent="."]
+modulate = Color(0.749576, 0, 0.0296376, 1)
+offset_left = 454.0
+offset_top = 63.0
+offset_right = 622.0
+offset_bottom = 100.0
+text = "Leave"
+
+[node name="Kick" type="Button" parent="."]
+modulate = Color(0.749576, 0, 0.0296376, 1)
+offset_left = 457.0
+offset_top = 117.0
+offset_right = 625.0
+offset_bottom = 154.0
+text = "Kick
+"
+
+[node name="Transfer Host" type="Button" parent="."]
+modulate = Color(0.749576, 0, 0.0296376, 1)
+offset_left = 458.0
+offset_top = 175.0
+offset_right = 626.0
+offset_bottom = 212.0
+text = "Give Up Host"
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = -1
+texture_repeat = 2
+color = Color(7.21961e-08, 0.171679, 0.463234, 0.776471)
+texture = ExtResource("2_ffxv4")
+texture_scale = Vector2(3.02, 3.02)
+polygon = PackedVector2Array(-1000, -1000, 2000, -1000, 2000, 1000, -1000, 1000)
+metadata/_edit_lock_ = true
+
+[node name="ItemList" type="ItemList" parent="."]
+visible = false
+offset_left = 22.0
+offset_top = 151.0
+offset_right = 332.0
+offset_bottom = 631.0
+item_count = 2
+item_0/text = "dsadsadsadas"
+item_1/text = "test"
+
+[node name="UserList" type="VBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 146.0
+offset_right = 272.0
+offset_bottom = 368.0
+script = ExtResource("3_85yof")
+
+[connection signal="pressed" from="Leave" to="." method="_on_leave_pressed"]
+[connection signal="item_selected" from="ItemList" to="." method="_on_item_list_item_selected"]

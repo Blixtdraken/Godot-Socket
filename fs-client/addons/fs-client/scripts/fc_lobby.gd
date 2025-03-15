@@ -33,8 +33,10 @@ func _on_packet_received(dict:Dictionary):
 		"lobby_join":
 			print("Joined Lobby")
 			signals.lobby_joined.emit()
+			FCRoom.instance.room_id = ""
 		"room_req_result":
 			if dict["approval"]:
 				FCRoom.instance.room_id = dict["room_id"]
 			signals.room_req_response.emit(dict["room_id"], dict["approval"], dict["error_msg"])
+				
 	pass
