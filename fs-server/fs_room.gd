@@ -104,28 +104,33 @@ func handle_inocmming_packets():
 					var target_uuid:int = packet["target_uuid"]
 					var sender_uuid:int = user.uuid
 					if sender_uuid == host_user.uuid:
+						handle_user_leave(user_list[target_uuid])
 						pass
+					else:
+						FLog.room("[color=red]" + str(sender_uuid) + " tried to kick someone while not being the host")
 					pass
 				"room_host_transfer":
 					var target_uuid:int = packet["target_uuid"]
 					var sender_uuid:int = user.uuid
 					if sender_uuid == host_user.uuid:
+						transfer_host(user_list[target_uuid])
 						pass
 					pass
 				"custom_packet":
+					handle_custom_packet(packet, user)
 					pass
 
 		pass
 	pass
 	
 func transfer_host(to_user:FSUser):
-	for user:FSUser in user_list.values():
-		user.peer.put_packet(var_to_bytes(
+	host_user = to_user
+	broadcast_packet(
 			{
-				"packet_type":"host_transfer",
-				"target_uuid":user.uuid
+				"packet_type":"room_host_change",
+				"target_uuid":to_user.uuid
 			}
-		))
+		)
 	pass
 
 func broadcast_packet(packet:Dictionary, exclusion:Array[FSUser] = []):
@@ -154,6 +159,7 @@ func send_user_join_packets(joined_user:FSUser):
 		"user_uuid":joined_user.uuid
 	})
 	pass
+
 func broadcast_user_leave_packet(leaving_user:FSUser):
 	broadcast_packet({
 		"packet_type":"room_user_left",
@@ -161,18 +167,42 @@ func broadcast_user_leave_packet(leaving_user:FSUser):
 	})
 	pass
 
-func handle_custom_packet(base_packet:Dictionary):
+enum TransferType{
+	BROADCAST, ## Send to everyone in the room
+	BROADCAST_EXCLUDE_SELF, ## Broadcast to everyone in room *EXCEPT* yourself (the sender)
+	HOST, ## Send only to the current host (host is gotten during)
+	PERSONAL ## Send to specific user specified by target_uuid
+}
+
+func handle_custom_packet(packet:Dictionary, sender:FSUser):
+	packet["packet_type"] = "room_custom_packet"
+	packet["sender_uuid"] = sender.uuid
+	var transfer_type:TransferType = packet["transfer_type"]
 	
+	match transfer_type:
+		TransferType.BROADCAST:
+			broadcast_packet(packet)
+		TransferType.BROADCAST_EXCLUDE_SELF:
+			broadcast_packet(packet, [sender])
+		TransferType.HOST:
+			host_user.peer.put_packet(var_to_bytes(packet))
+		TransferType.PERSONAL:
+			var target_user:FSUser = user_list[packet["target_uuid"]]
+		
 	pass
 
 ## If not sent to lobby they will be disconnected 
 func handle_user_leave(user_to_leave:FSUser, send_to_lobby:bool = true):
+	user_list.erase(user_to_leave.uuid)
+	if user_to_leave == host_user and user_list.size() >= 1:
+		transfer_host(user_list.values()[0])
+	
 	broadcast_user_leave_packet(user_to_leave)
 	if send_to_lobby:
 		user_to_leave.hand_over_to_lobby()
 	else:
 		user_to_leave.send_disconnect()
-	user_list.erase(user_to_leave.uuid)
+	
 	pass
 
 func _remove_room_signal():

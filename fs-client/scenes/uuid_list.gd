@@ -7,6 +7,13 @@ signal user_pressed(user_uuid:int)
 
 var selected_user:int = -1
 
+var current_colored_host:int = -1:
+	set(value):
+		if uuid_to_entry.has(current_colored_host):
+			uuid_to_entry[current_colored_host].modulate = Color(1, 1, 1)
+		current_colored_host = value
+		uuid_to_entry[current_colored_host].modulate = Color(0, 1, 0)
+
 func button_pressed(user_uuid:int):
 	selected_user = user_uuid
 	Debug.values_list["selected_uuid"] = str(selected_user)

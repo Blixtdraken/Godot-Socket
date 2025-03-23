@@ -11,7 +11,7 @@ script = ExtResource("1_76278")
 offset_left = 14.0
 offset_top = 14.0
 offset_right = 458.0
-offset_bottom = 136.0
+offset_bottom = 321.0
 bbcode_enabled = true
 text = "[outline_size=5][color=green]Placeholder: 1234
 Placeholder: 1234

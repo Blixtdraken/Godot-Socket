@@ -36,6 +36,26 @@ static func transfer_host(new_host_uuid:int):
 	))
 
 	pass
+
+static func kick_user(user_uuid:int):
+	FClient.instance.client_peer.put_packet(var_to_bytes(
+		{
+			"packet_type":"room_kick",
+			"target_uuid":user_uuid
+		}
+	))
+	pass
+
+static func send_packet(packet:FCCustomPacket):
+	FClient.instance.client_peer.put_packet(var_to_bytes(
+		{
+			"packet_type":"custom_packet",
+			"transfer_type":packet.transfer_type,
+			"payload": FSerializer.object_to_dictionary(packet)
+		}
+	))
+	pass
+
 func _init() -> void:
 	FClient.signals._packet_received.connect(_on_packet_received)
 
@@ -54,4 +74,22 @@ func _on_packet_received(packet:Dictionary):
 		"room_user_left":
 			var user_uuid:int = packet["user_uuid"]
 			signals.user_left.emit(user_uuid)
+		"room_host_change":
+			host_uuid = packet["target_uuid"]
+			signals.host_change.emit(host_uuid)
+			pass
+		"room_custom_packet":
+			handle_custom_packet(
+				FSerializer.dictionary_to_object(
+					packet["payload"]
+				),
+				packet["sender_uuid"]
+			)
+			pass
+	pass
+
+func handle_custom_packet(packet:FCCustomPacket, sender_uuid:int):
+	packet.sender_uuid = sender_uuid
+	packet._on_arrival()
+	signals.custom_packet_received.emit(packet)
 	pass
