@@ -12,7 +12,7 @@ config_version=5
 
 config/name="FS-Server"
 config/description="Server for FSMultiplayer project"
-run/main_scene="res://server.tscn"
+run/main_scene="res://Misc/server.tscn"
 run/print_header=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/low_processor_mode_sleep_usec=1

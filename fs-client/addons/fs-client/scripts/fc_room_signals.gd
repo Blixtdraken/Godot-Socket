@@ -2,6 +2,8 @@ extends Object
 class_name FCRoomSignals
 
 signal custom_packet_received(packet:FCCustomPacket)
+signal server_packet_received(payload:Dictionary)
+
 
 signal join_info_received()
 

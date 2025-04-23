@@ -9,6 +9,8 @@ signal tps(fps_limiter:FTimer)
 static var thread:Thread = Thread.new()
 static var instance:FServer
 
+
+
 var tcp_sever:TCPServer
 
 

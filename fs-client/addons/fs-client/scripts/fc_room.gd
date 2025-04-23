@@ -56,6 +56,14 @@ static func send_packet(packet:FCCustomPacket):
 	))
 	pass
 
+static func send_server_packet(payload:Dictionary):
+	FClient.instance.client_peer.put_packet(var_to_bytes(
+		{
+			"packet_type":"to_server_packet",
+			"payload":payload
+		}
+	))
+
 func _init() -> void:
 	FClient.signals._packet_received.connect(_on_packet_received)
 
@@ -77,7 +85,6 @@ func _on_packet_received(packet:Dictionary):
 		"room_host_change":
 			host_uuid = packet["target_uuid"]
 			signals.host_change.emit(host_uuid)
-			pass
 		"room_custom_packet":
 			handle_custom_packet(
 				FSerializer.dictionary_to_object(
@@ -85,7 +92,8 @@ func _on_packet_received(packet:Dictionary):
 				),
 				packet["sender_uuid"]
 			)
-			pass
+		"from_server_packet":
+			signals.server_packet_received.emit(packet["payload"])
 	pass
 
 func handle_custom_packet(packet:FCCustomPacket, sender_uuid:int):

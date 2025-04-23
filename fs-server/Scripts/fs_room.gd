@@ -17,6 +17,8 @@ var room_id:String
 
 var tree:SceneTree = Engine.get_main_loop()
 
+var plugin_wrapper:FSRoomPluginWrapper = FSRoomPluginWrapper.new(self)
+
 static func host_new_room(room_id:String,host:FSUser) -> FSRoom:
 	FLog.room("Making new room by Room ID: " + room_id + "       With " + str(host.uuid) + " as host")
 	var thread:Thread = Thread.new()
@@ -34,6 +36,7 @@ func _init(set_thread:Thread,room_id:String, host:FSUser) -> void:
 
 func start_room():
 	FLog.room("Made new thread for Room ID: " + room_id)
+	plugin_wrapper.trigger_room_start()
 	var host_confirmed:bool = wait_for_host()
 	if host_confirmed:
 		user_list[host_user.uuid] = host_user
@@ -66,10 +69,11 @@ func start_room_loop():
 	while true:
 		handle_join_queue()
 		handle_disconnected_users()
-		handle_inocmming_packets()
+		handle_inocoming_packets()
 		if user_list.size() == 0:
 			is_active = false
 			break
+		plugin_wrapper.trigger_room_tick()
 		tps_limiter.tick()
 	pass
 
@@ -81,6 +85,7 @@ func handle_join_queue():
 			if packet["packet_type"] == "room_join_confirm":
 				unconfirmed_user_list.erase(user.uuid)
 				user_list[user.uuid] = user
+				
 				send_user_join_packets(user)
 				FLog.room(str(user.uuid) + " joined room " + room_id)
 	pass
@@ -92,7 +97,7 @@ func handle_disconnected_users():
 		pass
 	pass
 	
-func handle_inocmming_packets():
+func handle_inocoming_packets():
 	for user:FSUser in user_list.values():
 		if user.peer.get_available_packet_count() != 0:
 			var packet:Dictionary = bytes_to_var(user.peer.get_packet())
@@ -119,6 +124,8 @@ func handle_inocmming_packets():
 				"custom_packet":
 					handle_custom_packet(packet, user)
 					pass
+				"to_server_packet":
+					plugin_wrapper.trigger_on_server_packet(packet["payload"], user.uuid)
 
 		pass
 	pass
@@ -143,6 +150,7 @@ func broadcast_packet(packet:Dictionary, exclusion:Array[FSUser] = []):
 	pass
 
 func send_user_join_packets(joined_user:FSUser):
+	plugin_wrapper.trigger_on_user_join(joined_user.uuid)
 	var user_list_uuid:Array[int] = []
 	
 	for user:FSUser in user_list.values():
@@ -161,6 +169,7 @@ func send_user_join_packets(joined_user:FSUser):
 	pass
 
 func broadcast_user_leave_packet(leaving_user:FSUser):
+	plugin_wrapper.trigger_on_user_leave(leaving_user.uuid)
 	broadcast_packet({
 		"packet_type":"room_user_left",
 		"user_uuid":leaving_user.uuid
@@ -178,6 +187,8 @@ func handle_custom_packet(packet:Dictionary, sender:FSUser):
 	packet["packet_type"] = "room_custom_packet"
 	packet["sender_uuid"] = sender.uuid
 	var transfer_type:TransferType = packet["transfer_type"]
+	
+	plugin_wrapper.trigger_on_custom_packet(packet["payload"],sender.uuid, transfer_type)
 	
 	match transfer_type:
 		TransferType.BROADCAST:

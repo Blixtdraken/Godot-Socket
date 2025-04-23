@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://4pb2rxqs0ooc"]
 
 [ext_resource type="Script" uid="uid://n1k3gxbwpeqy" path="res://room.gd" id="1_36trf"]
-[ext_resource type="Texture2D" uid="uid://dsngecpcsp0ev" path="res://icon.svg" id="2_ffxv4"]
+[ext_resource type="Texture2D" uid="uid://dkvvfub0l34tw" path="res://icon.svg" id="2_ffxv4"]
 [ext_resource type="Script" uid="uid://dn7uc1kh3yq8h" path="res://scenes/packet_button.gd" id="2_jxe34"]
 [ext_resource type="Script" uid="uid://d2xatamymvyjc" path="res://scenes/uuid_list.gd" id="3_85yof"]
 [ext_resource type="Script" uid="uid://b78wwr2fdl7xv" path="res://scenes/label.gd" id="4_14vil"]
@@ -52,6 +52,7 @@ text = "Send Packet"
 script = ExtResource("2_jxe34")
 
 [node name="Payload" type="LineEdit" parent="Packet"]
+layout_mode = 0
 offset_left = -157.0
 offset_top = 51.0
 offset_right = 343.0
