@@ -31,7 +31,7 @@ func _on_join_info_received():
 	for uuid in FCRoom.instance.user_list:
 		user_list.add_entry(uuid)
 	Debug.values_list["am_host"] = (FClient.uuid == FCRoom.instance.host_uuid)
-
+	InstancePacket.spawn("res://scenes/player.tscn", get_path())
 	pass
 
 var uuid_to_user_list_idx:Dictionary[int, int]
@@ -62,7 +62,7 @@ func _on_transfer_host_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_host_change(new_host_uuid:int):
-	Debug.values_list["am_host"] = (FClient.uuid == new_host_uuid)
+	#Debug.values_list["am_host"] = (FClient.uuid == new_host_uuid)
 	user_list.current_colored_host = new_host_uuid
 	pass
 

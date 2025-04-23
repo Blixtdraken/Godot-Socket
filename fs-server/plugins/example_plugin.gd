@@ -12,6 +12,7 @@ func _on_server_packet(payload:Dictionary, sender_uuid:int):
 
 ## The custom packet as a dictionary, might be confusing to use,
 ## Hihgly Reccomend using *print(payload)* to see how custom packets are structured
+var active_instances:Dictionary[int,Dictionary] = {}
 func _on_custom_packet(payload:Dictionary, sender_uuid:int, transfer_type:TransferType):
 	if transfer_type == TransferType.BROADCAST and payload["class_name"] == "InstancePacket":
 		pass
