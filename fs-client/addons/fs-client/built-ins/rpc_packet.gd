@@ -23,7 +23,7 @@ func _before_sending():
 
 func _on_arrival():
 	var instances:Dictionary = InstancePacket.net_instances.get_or_add(sender_uuid, {})
-	if instances.has([instance_uuid]):
+	if instances.has(instance_uuid):
 		var instance = instances[instance_uuid]
 		var callable:Callable = Callable(instance, method)
 	
