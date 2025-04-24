@@ -47,6 +47,7 @@ static func kick_user(user_uuid:int):
 	pass
 
 static func send_packet(packet:FCCustomPacket):
+	packet._before_sending()
 	FClient.instance.client_peer.put_packet(var_to_bytes(
 		{
 			"packet_type":"custom_packet",

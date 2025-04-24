@@ -5,14 +5,15 @@ class_name RPCPacket
 static var _packet_instance:RPCPacket = RPCPacket.new()
 
 
-var method:Callable
+var method:String
 var args:Array[Variant]
-
-static func rpc(method:Callable, args:Array[Variant]):
+var instance_uuid:int
+static func rpc(method:Callable, args:Array[Variant] = []):
 	var instance:Node = method.get_object()
-	_packet_instance.method = method
+	_packet_instance.method = method.get_method()
 	_packet_instance.args = args
-	if instance.get_multiplayer_authority() == FClient.uuid:
+	_packet_instance.instance_uuid = InstancePacket.my_instances_uuid[instance]
+	if instance.owner_uuid == FClient.uuid:
 		FCRoom.send_packet(_packet_instance)
 	pass
 
@@ -21,5 +22,10 @@ func _before_sending():
 	pass
 
 func _on_arrival():
-	method.callv(args)
+	var instances:Dictionary = InstancePacket.net_instances.get_or_add(sender_uuid, {})
+	if instances.has([instance_uuid]):
+		var instance = instances[instance_uuid]
+		var callable:Callable = Callable(instance, method)
+	
+		callable.callv(args)
 	pass

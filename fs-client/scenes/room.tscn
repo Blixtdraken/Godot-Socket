@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://4pb2rxqs0ooc"]
+[gd_scene load_steps=9 format=3 uid="uid://4pb2rxqs0ooc"]
 
 [ext_resource type="Script" uid="uid://n1k3gxbwpeqy" path="res://room.gd" id="1_36trf"]
 [ext_resource type="Texture2D" uid="uid://dkvvfub0l34tw" path="res://icon.svg" id="2_ffxv4"]
 [ext_resource type="Script" uid="uid://dn7uc1kh3yq8h" path="res://scenes/packet_button.gd" id="2_jxe34"]
 [ext_resource type="Script" uid="uid://d2xatamymvyjc" path="res://scenes/uuid_list.gd" id="3_85yof"]
+[ext_resource type="Script" uid="uid://lij8rlcmkwli" path="res://scenes/instance.gd" id="3_jn645"]
 [ext_resource type="Script" uid="uid://b78wwr2fdl7xv" path="res://scenes/label.gd" id="4_14vil"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jxe34"]
@@ -58,8 +59,17 @@ offset_top = 51.0
 offset_right = 343.0
 offset_bottom = 82.0
 
+[node name="Instance" type="Button" parent="."]
+modulate = Color(0, 0.75, 0.025, 1)
+offset_left = 758.0
+offset_top = 363.0
+offset_right = 926.0
+offset_bottom = 400.0
+text = "Instance"
+script = ExtResource("3_jn645")
+
 [node name="Polygon2D" type="Polygon2D" parent="."]
-z_index = -1
+z_index = -2
 texture_repeat = 2
 color = Color(7.21961e-08, 0.171679, 0.463234, 0.776471)
 texture = ExtResource("2_ffxv4")

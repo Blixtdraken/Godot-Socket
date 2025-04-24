@@ -16,7 +16,7 @@ var active_instances:Dictionary[int,Dictionary] = {}
 func _on_custom_packet(payload:Dictionary, sender_uuid:int, transfer_type:TransferType):
 	if transfer_type == TransferType.BROADCAST and payload["class_name"] == "InstancePacket":
 		pass
-	print(payload)
+
 	pass
 
 ## When a user joins the room, this will only be triggered after player has confirmed the join, meaning also subsequently, the person trying to host will always be 

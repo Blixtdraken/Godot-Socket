@@ -11,6 +11,7 @@ var scene_path: String
 
 var spawn_path: NodePath
 
+var instance_uuid: int
 enum ActionType{
 	SPAWN,
 	DESPAWM,
@@ -26,6 +27,11 @@ static func spawn(scene_path:String, spawn_path:NodePath = ""):
 
 func _before_sending():
 	transfer_type = TransferType.BROADCAST
+	var new_uuid:int = randi()
+	var my_instances:Dictionary = net_instances.get_or_add(FClient.uuid, {})
+	while my_instances.has(new_uuid): new_uuid = randi()
+	instance_uuid = new_uuid
+	print(instance_uuid)
 	pass
 
 static var scene_cache:Dictionary[String, PackedScene] = {}
@@ -34,17 +40,24 @@ func _on_arrival():
 		if !scene_cache.has(scene_path):
 			scene_cache[scene_path] = load(scene_path)
 		var new_instance:Node = scene_cache[scene_path].instantiate()
-		var new_uuid:int = randi()
-		while my_instances_uuid.has(new_uuid): new_uuid = randi()
 		
-		my_instances_uuid[new_instance] = new_uuid
-		net_instances[sender_uuid][new_uuid] = new_instance
+		var my_instances:Dictionary = net_instances.get_or_add(FClient.uuid, {})
+		
+		
+		my_instances_uuid[new_instance] = instance_uuid
+		
+		net_instances.get_or_add(sender_uuid, {})[instance_uuid] = new_instance
 		new_instance.name = str(sender_uuid)
 		
-		new_instance.call_deferred("set_multiplayer_authority",sender_uuid)
-		Engine.get_main_loop().root.get_node(spawn_path).add_child(new_instance)
+		new_instance.owner_uuid = sender_uuid
+
+		#new_instance.set_multiplayer_authority(sender_uuid)
 		
-		print(new_instance.get_multiplayer_authority())
+		
+		Engine.get_main_loop().root.get_node(spawn_path).add_child(new_instance)
+		print("Sender: ", sender_uuid)
+		print("Instance UUID: ", instance_uuid)
+		print("Owner UUID: ", new_instance.owner_uuid)
 	pass
 
 static func _get_instance(owner_uuid:int, instance_uuid:int)->Node:

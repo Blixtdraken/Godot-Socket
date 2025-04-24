@@ -31,7 +31,7 @@ func _on_join_info_received():
 	for uuid in FCRoom.instance.user_list:
 		user_list.add_entry(uuid)
 	Debug.values_list["am_host"] = (FClient.uuid == FCRoom.instance.host_uuid)
-	InstancePacket.spawn("res://scenes/player.tscn", get_path())
+	
 	pass
 
 var uuid_to_user_list_idx:Dictionary[int, int]
